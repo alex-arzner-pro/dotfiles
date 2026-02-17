@@ -151,7 +151,28 @@ else
 fi
 
 # ============================================================
-# 5. Sway and core packages
+# 5. SSH server (work profile)
+# ============================================================
+if [ "$PROFILE" = "work" ]; then
+    info "Setting up SSH server..."
+
+    if dpkg -l openssh-server 2>/dev/null | grep -q '^ii'; then
+        skip "openssh-server already installed"
+    else
+        sudo apt install -y openssh-server
+        ok "openssh-server installed"
+    fi
+
+    sudo systemctl enable ssh
+    sudo systemctl start ssh
+
+    ok "SSH server enabled and running"
+else
+    skip "SSH server — skipped (personal profile)"
+fi
+
+# ============================================================
+# 6. Sway and core packages
 # ============================================================
 info "Installing Sway and core packages..."
 
