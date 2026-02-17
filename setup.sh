@@ -155,7 +155,7 @@ else
 fi
 
 # ============================================================
-# 5. SSH server (work profile)
+# 5. SSH server and reboot protection (work profile)
 # ============================================================
 if [ "$PROFILE" = "work" ]; then
     info "Setting up SSH server..."
@@ -174,8 +174,29 @@ if [ "$PROFILE" = "work" ]; then
         sudo systemctl start ssh
         ok "SSH server enabled and running"
     fi
+
+    # molly-guard: asks hostname confirmation before shutdown/reboot over SSH
+    info "Setting up reboot protection..."
+    if dpkg -l molly-guard 2>/dev/null | grep -q '^ii'; then
+        skip "molly-guard already installed"
+    else
+        sudo apt install -y molly-guard
+        ok "molly-guard installed"
+    fi
+
+    # Disable power button to prevent accidental shutdown (FDE requires physical unlock)
+    LOGIND_OVERRIDE="/etc/systemd/logind.conf.d/power-button.conf"
+    if [ -f "$LOGIND_OVERRIDE" ]; then
+        skip "Power button already disabled"
+    else
+        sudo mkdir -p /etc/systemd/logind.conf.d
+        printf '[Login]\nHandlePowerKey=ignore\nHandlePowerKeyLongPress=poweroff\n' \
+            | sudo tee "$LOGIND_OVERRIDE" > /dev/null
+        sudo systemctl restart systemd-logind &>/dev/null || true
+        ok "Power button disabled (long press still works)"
+    fi
 else
-    skip "SSH server — skipped (personal profile)"
+    skip "SSH server / reboot protection — skipped (personal profile)"
 fi
 
 # ============================================================
