@@ -97,27 +97,18 @@ if echo "$GPU_INFO" | grep -qi nvidia; then
             warn "No NVIDIA driver found by ubuntu-drivers"
         fi
     fi
-    # PRIME profile and PowerMizer performance mode (work profile)
+    # PRIME on-demand mode (Optimus: display wired to Intel, NVIDIA for offload)
     if [ "$PROFILE" = "work" ]; then
         if command -v prime-select &>/dev/null; then
             CURRENT_PRIME=$(prime-select query 2>/dev/null || echo "unknown")
-            if [ "$CURRENT_PRIME" != "nvidia" ]; then
-                info "Setting PRIME profile to nvidia..."
-                sudo prime-select nvidia
-                ok "PRIME profile set to nvidia"
+            if [ "$CURRENT_PRIME" != "on-demand" ]; then
+                info "Setting PRIME profile to on-demand..."
+                sudo prime-select on-demand
+                ok "PRIME profile set to on-demand"
                 REBOOT_NEEDED=true
             else
-                skip "PRIME profile already set to nvidia"
+                skip "PRIME profile already set to on-demand"
             fi
-        fi
-
-        NVPM_CONF="/etc/modprobe.d/nvidia-powermizer.conf"
-        NVPM_LINE='options nvidia NVreg_RegistryDwords="PowerMizerEnable=0x1;PerfLevelSrc=0x2222;PowerMizerDefault=0x3;PowerMizerDefaultAC=0x3"'
-        if [ -f "$NVPM_CONF" ] && grep -qF "$NVPM_LINE" "$NVPM_CONF"; then
-            skip "PowerMizer already set to maximum performance"
-        else
-            echo "$NVPM_LINE" | sudo tee "$NVPM_CONF" > /dev/null
-            ok "PowerMizer set to maximum performance"
         fi
     fi
 else
