@@ -525,6 +525,16 @@ sudo flatpak override --filesystem=~/.local/share/themes:ro 2>/dev/null || true
 ok "Flatpak integration configured"
 
 # ============================================================
+# 19. Cleanup
+# ============================================================
+info "Cleaning up unused packages..."
+
+sudo apt autoremove -y
+sudo apt autoclean -y
+
+ok "Cleanup complete"
+
+# ============================================================
 # Summary
 # ============================================================
 _w=42
