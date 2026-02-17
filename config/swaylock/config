@@ -5,13 +5,13 @@
 color=282828
 
 # Indicator
-indicator-radius=120
-indicator-thickness=8
+indicator-radius=180
+indicator-thickness=12
 indicator-caps-lock
 
 # Font
 font=JetBrainsMono Nerd Font
-font-size=24
+font-size=48
 
 # Keyboard layout & failed attempts
 show-keyboard-layout
