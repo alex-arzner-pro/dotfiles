@@ -1,0 +1,179 @@
+# ── Variables ──
+set $mod Mod4
+set $term kitty
+set $menu fuzzel
+
+# ── Input ──
+input type:keyboard {
+    xkb_layout de,ru
+    xkb_options grp:caps_toggle
+}
+
+input type:touchpad {
+    tap enabled
+    natural_scroll enabled
+    dwt enabled
+}
+
+# ── Appearance (Gruvbox Dark) ──
+font pango:JetBrainsMono Nerd Font 10
+default_border pixel 2
+gaps inner 6
+gaps outer 3
+seat seat0 xcursor_theme Adwaita 24
+
+# class                 border  bg      text    indicator child_border
+client.focused          #d79921 #d79921 #282828 #fabd2f   #d79921
+client.focused_inactive #504945 #504945 #ebdbb2 #504945   #504945
+client.unfocused        #3c3836 #3c3836 #928374 #3c3836   #3c3836
+client.urgent           #cc241d #cc241d #ebdbb2 #cc241d   #cc241d
+
+# ── Status bar ──
+bar {
+    swaybar_command waybar
+}
+
+# ── Wallpaper ──
+output * bg #282828 solid_color
+
+# ── Monitors ──
+include ~/.config/sway/config.d/*
+
+# ── Keybindings: general ──
+bindsym $mod+Return exec $term
+bindsym $mod+d exec $menu
+bindsym $mod+Shift+q kill
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit Sway?' -B 'Yes' 'swaymsg exit'
+
+# ── Keybindings: focus ──
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# ── Keybindings: move windows ──
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# ── Keybindings: workspaces ──
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+
+# ── Keybindings: layout ──
+bindsym $mod+b splith
+bindsym $mod+v splitv
+bindsym $mod+f fullscreen toggle
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+floating_modifier $mod normal
+
+# ── Resize mode ──
+mode "resize" {
+    bindsym h resize shrink width 30px
+    bindsym j resize grow height 30px
+    bindsym k resize shrink height 30px
+    bindsym l resize grow width 30px
+    bindsym Left resize shrink width 30px
+    bindsym Down resize grow height 30px
+    bindsym Up resize shrink height 30px
+    bindsym Right resize grow width 30px
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# ── Screenshots ──
+bindsym Print exec grim ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
+bindsym $mod+Print exec grim -g "$(slurp)" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
+bindsym $mod+Shift+Print exec grim -g "$(slurp)" - | wl-copy
+
+# ── Brightness ──
+bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+
+# ── Audio ──
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+# ── Media ──
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
+# ── Handy voice transcription ──
+bindsym Ctrl+space exec handy --toggle-transcription
+
+# ── Clipboard history ──
+bindsym $mod+c exec cliphist list | fuzzel --dmenu | cliphist decode | wl-copy
+
+# ── File manager ──
+bindsym $mod+t exec thunar
+
+# ── Lock screen ──
+bindsym $mod+Escape exec swaylock -f -c 282828
+
+exec swayidle -w \
+    timeout 300 'swaylock -f -c 282828' \
+    timeout 600 'swaymsg "output * power off"' \
+    resume 'swaymsg "output * power on"' \
+    before-sleep 'swaylock -f -c 282828'
+
+# ── Power menu ──
+set $power "Power: (l)ock (e)xit (s)uspend (r)eboot (p)oweroff"
+mode $power {
+    bindsym l exec swaylock -f -c 282828; mode "default"
+    bindsym e exec swaymsg exit; mode "default"
+    bindsym s exec systemctl suspend; mode "default"
+    bindsym r exec systemctl reboot; mode "default"
+    bindsym p exec systemctl poweroff; mode "default"
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+}
+bindsym $mod+Shift+p mode $power
+
+# ── Autostart ──
+exec eval $(gnome-keyring-daemon --start --components=secrets,pkcs11,ssh)
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+exec /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+exec dunst
+exec blueman-applet
+exec nm-applet --indicator
+exec udiskie --tray
+exec wl-paste --watch cliphist store
+exec_always kanshi
+exec handy
+exec_always gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+exec_always gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'

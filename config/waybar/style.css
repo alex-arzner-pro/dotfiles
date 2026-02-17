@@ -1,0 +1,148 @@
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 13px;
+    min-height: 0;
+}
+
+window#waybar {
+    background: rgba(40, 40, 40, 0.95);
+    color: #ebdbb2;
+    border-bottom: 2px solid rgba(215, 153, 33, 0.4);
+}
+
+#workspaces button {
+    padding: 0 8px;
+    color: #928374;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    margin: 0 2px;
+}
+#workspaces button.focused {
+    color: #fabd2f;
+    border-bottom: 2px solid #d79921;
+}
+#workspaces button.urgent {
+    color: #fb4934;
+}
+#workspaces button:hover {
+    background: rgba(80, 73, 69, 0.6);
+    color: #ebdbb2;
+}
+
+#mode {
+    color: #282828;
+    background: #d79921;
+    padding: 0 10px;
+    font-weight: bold;
+}
+
+#window {
+    color: #a89984;
+}
+
+#clock,
+#battery,
+#cpu,
+#temperature,
+#memory,
+#disk,
+#network,
+#pulseaudio,
+#backlight,
+#bluetooth,
+#language,
+#idle_inhibitor,
+#tray {
+    padding: 0 10px;
+}
+
+#clock {
+    color: #fabd2f;
+    font-weight: bold;
+}
+
+#battery {
+    color: #b8bb26;
+}
+#battery.warning {
+    color: #fabd2f;
+}
+#battery.critical {
+    color: #fb4934;
+    animation: blink 1s linear infinite;
+}
+#battery.charging {
+    color: #b8bb26;
+}
+
+@keyframes blink {
+    to { color: #282828; }
+}
+
+#cpu {
+    color: #83a598;
+}
+
+#temperature {
+    color: #83a598;
+}
+#temperature.critical {
+    color: #fb4934;
+}
+
+#memory {
+    color: #d3869b;
+}
+
+#disk {
+    color: #928374;
+}
+
+#network {
+    color: #8ec07c;
+}
+#network.disconnected {
+    color: #fb4934;
+}
+
+#pulseaudio {
+    color: #fabd2f;
+}
+#pulseaudio.muted {
+    color: #928374;
+}
+
+#backlight {
+    color: #fabd2f;
+}
+
+#bluetooth {
+    color: #83a598;
+}
+#bluetooth.connected {
+    color: #8ec07c;
+}
+
+#language {
+    color: #d79921;
+}
+
+#idle_inhibitor {
+    color: #928374;
+}
+#idle_inhibitor.activated {
+    color: #fabd2f;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+tooltip {
+    background: #282828;
+    border: 1px solid #d79921;
+    border-radius: 6px;
+}
+tooltip label {
+    color: #ebdbb2;
+}

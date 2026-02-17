@@ -1,0 +1,95 @@
+# Gruvbox Dark theme for Starship
+
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$nodejs\
+$rust\
+$golang\
+$docker_context\
+$kubernetes\
+$cmd_duration\
+$line_break\
+$character"""
+
+[character]
+success_symbol = "[❯](bold #b8bb26)"
+error_symbol = "[❯](bold #fb4934)"
+
+[directory]
+style = "bold #83a598"
+truncation_length = 4
+truncate_to_repo = true
+format = "[$path]($style)[$read_only]($read_only_style) "
+read_only = " 󰌾"
+
+[git_branch]
+style = "bold #fabd2f"
+symbol = " "
+format = "[$symbol$branch(:$remote_branch)]($style) "
+
+[git_status]
+style = "#d79921"
+format = '([$all_status$ahead_behind]($style) )'
+conflicted = "="
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇡${ahead_count}⇣${behind_count}"
+untracked = "?${count}"
+stashed = "*${count}"
+modified = "!${count}"
+staged = "+${count}"
+deleted = "✘${count}"
+
+[cmd_duration]
+style = "#928374"
+min_time = 2_000
+format = "[$duration]($style) "
+
+[python]
+style = "#b8bb26"
+symbol = " "
+format = "[$symbol$version( \\($virtualenv\\))]($style) "
+
+[nodejs]
+style = "#8ec07c"
+symbol = " "
+format = "[$symbol$version]($style) "
+
+[rust]
+style = "#fb4934"
+symbol = " "
+format = "[$symbol$version]($style) "
+
+[golang]
+style = "#83a598"
+symbol = " "
+format = "[$symbol$version]($style) "
+
+[docker_context]
+style = "#458588"
+symbol = " "
+format = "[$symbol$context]($style) "
+
+[kubernetes]
+style = "#d3869b"
+symbol = "󱃾 "
+format = "[$symbol$context( \\($namespace\\))]($style) "
+disabled = false
+
+[username]
+style_user = "#d79921"
+format = "[$user]($style_user) "
+show_always = false
+
+[hostname]
+style = "#928374"
+ssh_only = true
+format = "@ [$hostname]($style) "
+
+[line_break]
+disabled = false

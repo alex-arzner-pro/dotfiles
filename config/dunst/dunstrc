@@ -1,0 +1,31 @@
+[global]
+monitor = 0
+follow = mouse
+width = 350
+height = 100
+offset = 10x10
+padding = 12
+horizontal_padding = 12
+frame_width = 2
+frame_color = "#d79921"
+font = JetBrainsMono Nerd Font 10
+corner_radius = 8
+mouse_left_click = close_current
+mouse_right_click = close_all
+mouse_middle_click = do_action
+
+[urgency_low]
+background = "#282828"
+foreground = "#a89984"
+timeout = 5
+
+[urgency_normal]
+background = "#282828"
+foreground = "#ebdbb2"
+timeout = 10
+
+[urgency_critical]
+background = "#282828"
+foreground = "#fb4934"
+frame_color = "#cc241d"
+timeout = 0

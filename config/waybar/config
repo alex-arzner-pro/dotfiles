@@ -1,0 +1,119 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 36,
+    "spacing": 0,
+    "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
+    "modules-center": ["clock"],
+    "modules-right": ["tray", "idle_inhibitor", "pulseaudio", "backlight", "bluetooth", "network", "disk", "cpu", "temperature", "memory", "battery", "sway/language"],
+
+    "sway/workspaces": {
+        "disable-scroll": false,
+        "all-outputs": true,
+        "format": "{icon}",
+        "format-icons": {
+            "1": "󰎤",
+            "2": "󰎧",
+            "3": "󰎪",
+            "4": "󰎭",
+            "5": "󰎱",
+            "6": "󰎳",
+            "7": "󰎶",
+            "8": "󰎹",
+            "9": "󰎼",
+            "focused": "",
+            "default": ""
+        }
+    },
+    "sway/mode": {
+        "format": "  {}"
+    },
+    "sway/window": {
+        "max-length": 50,
+        "format": "{title}"
+    },
+    "sway/language": {
+        "format": "  {short}",
+        "tooltip-format": "{long}"
+    },
+    "clock": {
+        "format": "  {:%H:%M}",
+        "format-alt": "  {:%A, %d %B %Y  %H:%M:%S}",
+        "tooltip-format": "<tt>{calendar}</tt>",
+        "interval": 1,
+        "calendar": {
+            "format": {
+                "today": "<b><u>{}</u></b>"
+            }
+        }
+    },
+    "battery": {
+        "states": { "good": 80, "warning": 30, "critical": 15 },
+        "format": "{icon}  {capacity}% {time}",
+        "format-charging": "  {capacity}%",
+        "format-plugged": "  {capacity}%",
+        "format-time": "({H}h {M}m)",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "network": {
+        "format-wifi": "  {essid} ({signalStrength}%)",
+        "format-ethernet": "󰈀  {ifname}",
+        "format-disconnected": "⚠  Offline",
+        "tooltip-format": "{ipaddr}/{cidr} via {gwaddr}",
+        "on-click": "nm-connection-editor"
+    },
+    "pulseaudio": {
+        "format": "{icon}  {volume}%",
+        "format-muted": "  muted",
+        "format-icons": {
+            "headphone": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol",
+        "on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
+        "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -5%"
+    },
+    "backlight": {
+        "format": "{icon}  {percent}%",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "bluetooth": {
+        "format": "  {status}",
+        "format-connected": "  {device_alias} ({num_connections})",
+        "format-disabled": "",
+        "on-click": "blueman-manager"
+    },
+    "cpu": {
+        "format": "  {usage}%",
+        "interval": 2,
+        "tooltip": true
+    },
+    "temperature": {
+        "format": "  {temperatureC}°C",
+        "critical-threshold": 80,
+        "format-critical": "  {temperatureC}°C"
+    },
+    "memory": {
+        "format": "  {percentage}% ({used:0.1f}G)",
+        "interval": 5
+    },
+    "disk": {
+        "format": "󰋊  {percentage_used}%",
+        "path": "/",
+        "interval": 30
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "󰅶",
+            "deactivated": "󰾪"
+        },
+        "tooltip-format-activated": "Idle inhibitor: ON",
+        "tooltip-format-deactivated": "Idle inhibitor: OFF"
+    },
+    "tray": {
+        "icon-size": 16,
+        "spacing": 8
+    }
+}
