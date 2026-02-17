@@ -144,12 +144,7 @@ bindsym --to-code $mod+t exec thunar
 
 # ── Lock screen ──
 bindsym --to-code $mod+Escape exec swaylock -f
-
-exec swayidle -w \
-    timeout 300 'swaylock -f' \
-    timeout 600 'swaymsg "output * power off"' \
-    resume 'swaymsg "output * power on"' \
-    before-sleep 'swaylock -f'
+# swayidle is configured per-profile in config.d/monitors.conf
 
 # ── Power menu ──
 set $power "Power: (l)ock (e)xit (s)uspend (r)eboot (p)oweroff"
