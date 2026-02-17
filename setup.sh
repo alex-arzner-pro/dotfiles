@@ -241,7 +241,38 @@ sudo apt install -y \
 ok "Core packages installed"
 
 # ============================================================
-# 6a. Brightnessctl permissions
+# 6a. Default applications
+# ============================================================
+info "Setting default applications..."
+
+# Terminal emulator → Kitty
+if update-alternatives --query x-terminal-emulator 2>/dev/null | grep -q "Value:.*kitty"; then
+    skip "Kitty already set as default terminal"
+else
+    sudo update-alternatives --set x-terminal-emulator /usr/bin/kitty 2>/dev/null \
+        || sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/kitty 50 \
+        && sudo update-alternatives --set x-terminal-emulator /usr/bin/kitty
+    ok "Kitty set as default terminal"
+fi
+
+# Web browser → Chrome
+if xdg-settings get default-web-browser 2>/dev/null | grep -q "google-chrome"; then
+    skip "Chrome already set as default browser"
+else
+    xdg-settings set default-web-browser google-chrome.desktop 2>/dev/null
+    ok "Chrome set as default browser"
+fi
+
+# File manager → Thunar
+if xdg-mime query default inode/directory 2>/dev/null | grep -q "thunar"; then
+    skip "Thunar already set as default file manager"
+else
+    xdg-mime default thunar.desktop inode/directory
+    ok "Thunar set as default file manager"
+fi
+
+# ============================================================
+# 6b. Brightnessctl permissions
 # ============================================================
 info "Configuring brightnessctl permissions..."
 
