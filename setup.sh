@@ -76,7 +76,7 @@ ok "System updated"
 # ============================================================
 info "Detecting GPU..."
 
-GPU_INFO=$(lspci | grep -i vga || true)
+GPU_INFO=$(lspci | grep -iE 'vga|3d controller' || true)
 echo "  $GPU_INFO"
 
 if echo "$GPU_INFO" | grep -qi nvidia; then
