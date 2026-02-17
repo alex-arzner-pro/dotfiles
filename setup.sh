@@ -123,13 +123,14 @@ fi
 
 if [ "$REBOOT_NEEDED" = true ]; then
     echo ""
-    warn "NVIDIA driver was just installed. Reboot required."
+    warn "NVIDIA configuration changed. Reboot required."
     warn "After reboot, run this script again to continue setup."
     echo ""
     read -p "Reboot now? (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         sudo reboot
+        exit 0
     else
         info "Please reboot manually and re-run this script."
         exit 0
