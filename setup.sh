@@ -332,6 +332,59 @@ else
 fi
 
 # ============================================================
+# 9a. VS Code
+# ============================================================
+info "Installing VS Code..."
+
+if command -v code &>/dev/null; then
+    skip "VS Code already installed"
+else
+    wget -qO /tmp/vscode.deb "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
+    sudo dpkg -i /tmp/vscode.deb || sudo apt install -f -y
+    rm -f /tmp/vscode.deb
+    ok "VS Code installed"
+fi
+
+# ============================================================
+# 9b. Google Antigravity IDE
+# ============================================================
+info "Installing Antigravity..."
+
+if command -v antigravity &>/dev/null; then
+    skip "Antigravity already installed"
+else
+    AGY_KEYRING="/usr/share/keyrings/google-antigravity.gpg"
+    AGY_REPO="/etc/apt/sources.list.d/google-antigravity.list"
+    if [ ! -f "$AGY_KEYRING" ]; then
+        curl -fsSL https://us-central1-apt.pkg.dev/doc/repo-signing-key.gpg \
+            | sudo gpg --batch --yes --dearmor -o "$AGY_KEYRING"
+    fi
+    if [ ! -f "$AGY_REPO" ]; then
+        echo "deb [arch=amd64 signed-by=$AGY_KEYRING] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev antigravity-debian main" \
+            | sudo tee "$AGY_REPO" > /dev/null
+        sudo apt update
+    fi
+    sudo apt install -y antigravity
+    ok "Antigravity installed"
+fi
+
+# ============================================================
+# 9c. Nextcloud client (via official PPA)
+# ============================================================
+info "Installing Nextcloud client..."
+
+if command -v nextcloud &>/dev/null; then
+    skip "Nextcloud client already installed"
+else
+    if ! grep -rq "nextcloud-devs/client" /etc/apt/sources.list.d/ 2>/dev/null; then
+        sudo add-apt-repository -y ppa:nextcloud-devs/client
+        sudo apt update
+    fi
+    sudo apt install -y nextcloud-desktop
+    ok "Nextcloud client installed"
+fi
+
+# ============================================================
 # 10. Messaging apps (Flatpak)
 # ============================================================
 info "Installing messaging apps..."
@@ -504,7 +557,9 @@ _line "  Super+c        - clipboard history"
 _line "  Super+t        - file manager"
 _empty
 _line "Installed:"
-_line "  Chrome, Signal, Slack, Telegram"
+_line "  Chrome, VS Code, Antigravity"
+_line "  Nextcloud client"
+_line "  Signal, Slack, Telegram"
 _line "  Handy, Starship, Nerd Fonts"
 _empty
 if [ "$PROFILE" = "work" ]; then
