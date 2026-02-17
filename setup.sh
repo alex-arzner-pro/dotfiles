@@ -436,6 +436,29 @@ else
 fi
 
 # ============================================================
+# 11a. Ventoy (bootable USB tool)
+# ============================================================
+info "Installing Ventoy..."
+
+VENTOY_DIR="$HOME/bin/ventoy"
+if [ -d "$VENTOY_DIR" ] && [ -f "$VENTOY_DIR/Ventoy2Disk.sh" ]; then
+    skip "Ventoy already installed in $VENTOY_DIR"
+else
+    VENTOY_VER=$(curl -sL https://api.github.com/repos/ventoy/Ventoy/releases/latest | grep -oP '"tag_name":\s*"v?\K[^"]+')
+    if [ -z "$VENTOY_VER" ]; then
+        warn "Could not fetch latest Ventoy version from GitHub"
+    else
+        info "Downloading Ventoy $VENTOY_VER..."
+        wget -qO /tmp/ventoy.tar.gz "https://github.com/ventoy/Ventoy/releases/download/v${VENTOY_VER}/ventoy-${VENTOY_VER}-linux.tar.gz"
+        mkdir -p "$VENTOY_DIR"
+        tar -xzf /tmp/ventoy.tar.gz -C /tmp
+        cp -r "/tmp/ventoy-${VENTOY_VER}/"* "$VENTOY_DIR"/
+        rm -rf /tmp/ventoy.tar.gz "/tmp/ventoy-${VENTOY_VER}"
+        ok "Ventoy $VENTOY_VER installed in $VENTOY_DIR"
+    fi
+fi
+
+# ============================================================
 # 12. Create directories
 # ============================================================
 info "Creating directories..."
@@ -459,9 +482,28 @@ cp "$DOTFILES_DIR/config/fuzzel/fuzzel.ini"     ~/.config/fuzzel/fuzzel.ini
 cp "$DOTFILES_DIR/config/dunst/dunstrc"         ~/.config/dunst/dunstrc
 cp "$DOTFILES_DIR/config/starship.toml"         ~/.config/starship.toml
 cp "$DOTFILES_DIR/config/electron-flags.conf"   ~/.config/electron-flags.conf
-cp "$DOTFILES_DIR/config/face.jpg"              ~/.face
-
 ok "Configs deployed"
+
+# ============================================================
+# 13a. User avatar (GDM / AccountsService)
+# ============================================================
+info "Setting user avatar..."
+
+cp "$DOTFILES_DIR/config/face.jpg" ~/.face
+ACCT_ICON="/var/lib/AccountsService/icons/$USER"
+ACCT_USER="/var/lib/AccountsService/users/$USER"
+sudo cp "$DOTFILES_DIR/config/face.jpg" "$ACCT_ICON"
+if [ -f "$ACCT_USER" ]; then
+    if grep -q "^Icon=" "$ACCT_USER"; then
+        sudo sed -i "s|^Icon=.*|Icon=$ACCT_ICON|" "$ACCT_USER"
+    else
+        echo "Icon=$ACCT_ICON" | sudo tee -a "$ACCT_USER" > /dev/null
+    fi
+else
+    printf '[User]\nIcon=%s\n' "$ACCT_ICON" | sudo tee "$ACCT_USER" > /dev/null
+fi
+
+ok "User avatar set"
 
 # ============================================================
 # 14. Deploy profile-specific configs (monitors, kanshi)
