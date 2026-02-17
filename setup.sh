@@ -292,6 +292,23 @@ else
     ok "Thunar set as default file manager"
 fi
 
+# XFCE helpers (Thunar uses exo-open, not x-terminal-emulator)
+XFCE_HELPERS="$HOME/.config/xfce4/helpers.rc"
+if [ -f "$XFCE_HELPERS" ] && grep -q "TerminalEmulator=custom" "$XFCE_HELPERS"; then
+    skip "XFCE helpers already configured"
+else
+    mkdir -p "$HOME/.config/xfce4"
+    cat > "$XFCE_HELPERS" << 'EOF'
+TerminalEmulator=custom-TerminalEmulator
+TerminalEmulatorCustom=kitty
+WebBrowser=custom-WebBrowser
+WebBrowserCustom=google-chrome-stable
+FileManager=custom-FileManager
+FileManagerCustom=thunar
+EOF
+    ok "XFCE helpers configured (Thunar terminal → Kitty)"
+fi
+
 # ============================================================
 # 6b. Brightnessctl permissions
 # ============================================================
