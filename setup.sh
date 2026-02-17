@@ -293,18 +293,24 @@ else
 fi
 
 # XFCE helpers (Thunar uses exo-open, not x-terminal-emulator)
+KITTY_HELPER="/usr/share/xfce4/helpers/kitty.desktop"
+if [ -f "$KITTY_HELPER" ]; then
+    skip "Kitty XFCE helper already installed"
+else
+    sudo mkdir -p /usr/share/xfce4/helpers
+    sudo cp "$DOTFILES_DIR/config/kitty-xfce-helper.desktop" "$KITTY_HELPER"
+    ok "Kitty XFCE helper installed"
+fi
+
 XFCE_HELPERS="$HOME/.config/xfce4/helpers.rc"
-if [ -f "$XFCE_HELPERS" ] && grep -q "TerminalEmulator=custom" "$XFCE_HELPERS"; then
+if [ -f "$XFCE_HELPERS" ] && grep -q "TerminalEmulator=kitty" "$XFCE_HELPERS"; then
     skip "XFCE helpers already configured"
 else
     mkdir -p "$HOME/.config/xfce4"
     cat > "$XFCE_HELPERS" << 'EOF'
-TerminalEmulator=custom-TerminalEmulator
-TerminalEmulatorCustom=kitty
-WebBrowser=custom-WebBrowser
-WebBrowserCustom=google-chrome-stable
-FileManager=custom-FileManager
-FileManagerCustom=thunar
+TerminalEmulator=kitty
+WebBrowser=google-chrome
+FileManager=thunar
 EOF
     ok "XFCE helpers configured (Thunar terminal → Kitty)"
 fi
