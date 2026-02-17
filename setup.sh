@@ -361,39 +361,46 @@ ok "Flatpak integration configured"
 # ============================================================
 # Summary
 # ============================================================
+_w=42
+_top() { printf "╔"; printf '═%.0s' $(seq 1 $_w); printf "╗\n"; }
+_mid() { printf "╠"; printf '═%.0s' $(seq 1 $_w); printf "╣\n"; }
+_bot() { printf "╚"; printf '═%.0s' $(seq 1 $_w); printf "╝\n"; }
+_line() { printf "║  %-$((_w - 2))s║\n" "$1"; }
+_empty() { printf "║%${_w}s║\n" ""; }
+
 echo ""
-echo "╔══════════════════════════════════════════╗"
-echo "║          Setup complete!                  ║"
-echo "║          Profile: $PROFILE                ║"
-echo "║          Theme: Gruvbox Dark              ║"
-echo "╠══════════════════════════════════════════╣"
-echo "║                                          ║"
-echo "║  1. Log out                               ║"
-echo "║  2. Click ⚙ on the login screen           ║"
-echo "║  3. Select «Sway»                        ║"
-echo "║  4. Log in                                ║"
-echo "║                                          ║"
-echo "║  Super+Enter    → terminal                ║"
-echo "║  Super+d        → launcher                ║"
-echo "║  Super+Shift+q  → close window            ║"
-echo "║  Super+1-9      → workspaces              ║"
-echo "║  Super+Shift+p  → power menu              ║"
-echo "║  Super+Escape   → lock screen             ║"
-echo "║  Ctrl+Space     → Handy transcribe        ║"
-echo "║  CapsLock       → switch DE/RU layout     ║"
-echo "║  Super+c        → clipboard history       ║"
-echo "║  Super+t        → file manager             ║"
-echo "║                                          ║"
-echo "║  Installed:                                ║"
-echo "║    Chrome, Signal, Slack, Telegram, Handy  ║"
-echo "║    Starship prompt, Nerd Fonts             ║"
-echo "║                                          ║"
+_top
+_line "Setup complete!"
+_line "Profile: $PROFILE"
+_line "Theme: Gruvbox Dark"
+_mid
+_empty
+_line "1. Log out"
+_line "2. Select 'Sway' on the login screen"
+_line "3. Log in"
+_empty
+_line "Key bindings:"
+_line "  Super+Enter    - terminal"
+_line "  Super+d        - launcher"
+_line "  Super+Shift+q  - close window"
+_line "  Super+1-9      - workspaces"
+_line "  Super+Shift+p  - power menu"
+_line "  Super+Escape   - lock screen"
+_line "  Ctrl+Space     - Handy transcribe"
+_line "  CapsLock       - switch DE/RU"
+_line "  Super+c        - clipboard history"
+_line "  Super+t        - file manager"
+_empty
+_line "Installed:"
+_line "  Chrome, Signal, Slack, Telegram"
+_line "  Handy, Starship, Nerd Fonts"
+_empty
 if [ "$PROFILE" = "work" ]; then
-echo "║  NOTE: Edit monitor config after login:    ║"
-echo "║    swaymsg -t get_outputs                  ║"
-echo "║    ~/.config/sway/config.d/monitors.conf   ║"
-echo "║    ~/.config/kanshi/config                 ║"
-echo "║                                          ║"
+_line "NOTE: Edit monitors after login:"
+_line "  swaymsg -t get_outputs"
+_line "  ~/.config/sway/config.d/monitors.conf"
+_line "  ~/.config/kanshi/config"
+_empty
 fi
-echo "╚══════════════════════════════════════════╝"
+_bot
 echo ""
