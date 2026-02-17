@@ -459,6 +459,7 @@ cp "$DOTFILES_DIR/config/fuzzel/fuzzel.ini"     ~/.config/fuzzel/fuzzel.ini
 cp "$DOTFILES_DIR/config/dunst/dunstrc"         ~/.config/dunst/dunstrc
 cp "$DOTFILES_DIR/config/starship.toml"         ~/.config/starship.toml
 cp "$DOTFILES_DIR/config/electron-flags.conf"   ~/.config/electron-flags.conf
+cp "$DOTFILES_DIR/config/face.jpg"              ~/.face
 
 ok "Configs deployed"
 
