@@ -284,7 +284,7 @@ done
 info "Installing Handy..."
 
 if command -v handy &>/dev/null; then
-    INSTALLED_VER=$(handy --version 2>/dev/null | grep -oP '\d+\.\d+\.\d+' || echo "unknown")
+    INSTALLED_VER=$(dpkg-query -W -f='${Version}' handy 2>/dev/null || echo "unknown")
     LATEST_VER=$(curl -sL https://api.github.com/repos/cjpais/Handy/releases/latest | grep -oP '"tag_name":\s*"v?\K[^"]+')
     if [ "$INSTALLED_VER" = "$LATEST_VER" ]; then
         skip "Handy already at latest version ($INSTALLED_VER)"
