@@ -34,6 +34,13 @@ The script will ask to choose a profile:
 - **Apps**: Chrome, Signal, Slack, Telegram, Handy (voice input)
 - **Utilities**: Fuzzel, Dunst, Cliphist, Thunar, Grim/Slurp, Brightnessctl
 
+### Work profile extras
+
+- NVIDIA proprietary drivers + PRIME nvidia + PowerMizer max performance
+- Sway `--unsupported-gpu` flag for NVIDIA compatibility
+- SSH server (openssh-server)
+- Reboot protection: molly-guard + power button disable (FDE remote access)
+
 ## Structure
 
 ```text
