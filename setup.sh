@@ -111,11 +111,14 @@ if echo "$GPU_INFO" | grep -qi nvidia; then
             fi
         fi
 
-        info "Setting PowerMizer to Prefer Maximum Performance..."
-        sudo tee /etc/modprobe.d/nvidia-powermizer.conf > /dev/null << 'NVPM_EOF'
-options nvidia NVreg_RegistryDwords="PowerMizerEnable=0x1;PerfLevelSrc=0x2222;PowerMizerDefault=0x3;PowerMizerDefaultAC=0x3"
-NVPM_EOF
-        ok "PowerMizer set to maximum performance"
+        NVPM_CONF="/etc/modprobe.d/nvidia-powermizer.conf"
+        NVPM_LINE='options nvidia NVreg_RegistryDwords="PowerMizerEnable=0x1;PerfLevelSrc=0x2222;PowerMizerDefault=0x3;PowerMizerDefaultAC=0x3"'
+        if [ -f "$NVPM_CONF" ] && grep -qF "$NVPM_LINE" "$NVPM_CONF"; then
+            skip "PowerMizer already set to maximum performance"
+        else
+            echo "$NVPM_LINE" | sudo tee "$NVPM_CONF" > /dev/null
+            ok "PowerMizer set to maximum performance"
+        fi
     fi
 else
     ok "Intel GPU only — no additional drivers needed"
@@ -164,10 +167,13 @@ if [ "$PROFILE" = "work" ]; then
         ok "openssh-server installed"
     fi
 
-    sudo systemctl enable ssh
-    sudo systemctl start ssh
-
-    ok "SSH server enabled and running"
+    if systemctl is-enabled ssh &>/dev/null && systemctl is-active ssh &>/dev/null; then
+        skip "SSH server already enabled and running"
+    else
+        sudo systemctl enable ssh &>/dev/null
+        sudo systemctl start ssh
+        ok "SSH server enabled and running"
+    fi
 else
     skip "SSH server — skipped (personal profile)"
 fi
