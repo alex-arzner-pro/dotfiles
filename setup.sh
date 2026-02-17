@@ -547,7 +547,7 @@ fi
 # ============================================================
 info "Creating directories..."
 
-mkdir -p ~/.config/{sway,sway/config.d,kitty,fuzzel,dunst,waybar,kanshi,starship}
+mkdir -p ~/.config/{sway,sway/config.d,kitty,fuzzel,dunst,waybar,kanshi,starship,swaylock}
 mkdir -p ~/bin
 mkdir -p ~/Pictures
 
@@ -566,6 +566,7 @@ cp "$DOTFILES_DIR/config/fuzzel/fuzzel.ini"     ~/.config/fuzzel/fuzzel.ini
 cp "$DOTFILES_DIR/config/dunst/dunstrc"         ~/.config/dunst/dunstrc
 cp "$DOTFILES_DIR/config/starship.toml"         ~/.config/starship.toml
 cp "$DOTFILES_DIR/config/electron-flags.conf"   ~/.config/electron-flags.conf
+cp "$DOTFILES_DIR/config/swaylock/config"        ~/.config/swaylock/config
 cp "$DOTFILES_DIR/config/ventoy-web.sh"         ~/bin/ventoy-web.sh
 chmod +x ~/bin/ventoy-web.sh
 mkdir -p ~/.local/share/applications
@@ -600,6 +601,23 @@ info "Deploying profile configs: $PROFILE..."
 
 cp "$DOTFILES_DIR/profiles/$PROFILE/monitors.conf"  ~/.config/sway/config.d/monitors.conf
 cp "$DOTFILES_DIR/profiles/$PROFILE/kanshi.config"   ~/.config/kanshi/config
+
+# Deploy wallpaper if present in profile
+if [ -f "$DOTFILES_DIR/profiles/$PROFILE/wallpaper.png" ]; then
+    cp "$DOTFILES_DIR/profiles/$PROFILE/wallpaper.png" ~/Pictures/wallpaper.png
+    ok "Wallpaper deployed"
+fi
+
+# Deploy lockscreen image if present in profile
+if [ -f "$DOTFILES_DIR/profiles/$PROFILE/lockscreen.png" ]; then
+    cp "$DOTFILES_DIR/profiles/$PROFILE/lockscreen.png" ~/Pictures/lockscreen.png
+    # Add image path to swaylock config
+    if ! grep -q "^image=" ~/.config/swaylock/config 2>/dev/null; then
+        echo "image=$HOME/Pictures/lockscreen.png" >> ~/.config/swaylock/config
+        echo "scaling=fill" >> ~/.config/swaylock/config
+    fi
+    ok "Lock screen image deployed"
+fi
 
 ok "Profile configs deployed ($PROFILE)"
 

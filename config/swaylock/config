@@ -1,0 +1,51 @@
+# Swaylock — Gruvbox Dark theme
+# Image is set per-profile by setup.sh (lockscreen.png → ~/Pictures/lockscreen.png)
+
+# Background (fallback if no lockscreen image)
+color=282828
+
+# Indicator
+indicator-radius=120
+indicator-thickness=8
+indicator-caps-lock
+
+# Font
+font=JetBrainsMono Nerd Font
+font-size=24
+
+# Keyboard layout & failed attempts
+show-keyboard-layout
+show-failed-attempts
+
+# Colors — idle state
+ring-color=d79921
+inside-color=28282880
+text-color=ebdbb2
+separator-color=00000000
+line-color=00000000
+
+# Colors — typing
+key-hl-color=fabd2f
+bs-hl-color=fb4934
+
+# Colors — verifying password
+ring-ver-color=458588
+inside-ver-color=45858880
+text-ver-color=ebdbb2
+line-ver-color=00000000
+
+# Colors — wrong password
+ring-wrong-color=cc241d
+inside-wrong-color=cc241d80
+text-wrong-color=ebdbb2
+line-wrong-color=00000000
+
+# Colors — clearing input
+ring-clear-color=d79921
+inside-clear-color=d7992180
+text-clear-color=ebdbb2
+line-clear-color=00000000
+
+# Colors — caps lock
+caps-lock-key-hl-color=d65d0e
+caps-lock-bs-hl-color=fb4934

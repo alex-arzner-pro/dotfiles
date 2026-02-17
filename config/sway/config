@@ -143,18 +143,18 @@ bindsym $mod+c exec cliphist list | fuzzel --dmenu | cliphist decode | wl-copy
 bindsym $mod+t exec thunar
 
 # ── Lock screen ──
-bindsym $mod+Escape exec swaylock -f -c 282828
+bindsym $mod+Escape exec swaylock -f
 
 exec swayidle -w \
-    timeout 300 'swaylock -f -c 282828' \
+    timeout 300 'swaylock -f' \
     timeout 600 'swaymsg "output * power off"' \
     resume 'swaymsg "output * power on"' \
-    before-sleep 'swaylock -f -c 282828'
+    before-sleep 'swaylock -f'
 
 # ── Power menu ──
 set $power "Power: (l)ock (e)xit (s)uspend (r)eboot (p)oweroff"
 mode $power {
-    bindsym l exec swaylock -f -c 282828; mode "default"
+    bindsym l exec swaylock -f; mode "default"
     bindsym e exec swaymsg exit; mode "default"
     bindsym s exec systemctl suspend; mode "default"
     bindsym r exec systemctl reboot; mode "default"
