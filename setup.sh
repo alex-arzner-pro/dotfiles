@@ -195,16 +195,25 @@ if [ "$PROFILE" = "work" ]; then
         ok "molly-guard installed"
     fi
 
-    # Disable power button to prevent accidental shutdown (FDE requires physical unlock)
-    LOGIND_OVERRIDE="/etc/systemd/logind.conf.d/power-button.conf"
-    if [ -f "$LOGIND_OVERRIDE" ]; then
-        skip "Power button already disabled"
+    # Power management: disable power button, lid suspend, idle suspend
+    LOGIND_OVERRIDE="/etc/systemd/logind.conf.d/power-management.conf"
+    if [ -f "$LOGIND_OVERRIDE" ] && grep -q "HandleLidSwitch=ignore" "$LOGIND_OVERRIDE"; then
+        skip "Power management already configured"
     else
         sudo mkdir -p /etc/systemd/logind.conf.d
-        printf '[Login]\nHandlePowerKey=ignore\nHandlePowerKeyLongPress=poweroff\n' \
+        sudo rm -f /etc/systemd/logind.conf.d/power-button.conf
+        printf '[Login]\nHandlePowerKey=ignore\nHandlePowerKeyLongPress=poweroff\nHandleLidSwitch=ignore\nHandleLidSwitchExternalPower=ignore\nHandleLidSwitchDocked=ignore\nIdleAction=ignore\n' \
             | sudo tee "$LOGIND_OVERRIDE" > /dev/null
         sudo systemctl restart systemd-logind &>/dev/null || true
-        ok "Power button disabled (long press still works)"
+        ok "Power management configured (no suspend on lid close/idle)"
+    fi
+
+    # Mask sleep targets to completely prevent suspend/hibernate
+    if systemctl is-enabled suspend.target 2>/dev/null | grep -q "masked"; then
+        skip "Sleep targets already masked"
+    else
+        sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+        ok "Sleep targets masked (suspend/hibernate disabled)"
     fi
 else
     skip "SSH server / reboot protection — skipped (personal profile)"
