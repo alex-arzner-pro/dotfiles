@@ -32,19 +32,40 @@ echo ""
 # ============================================================
 # 0. Profile selection
 # ============================================================
-echo "Select profile:"
-echo "  1) personal — ThinkPad T14 (Intel, home dock)"
-echo "  2) work     — Dell XPS (Intel + NVIDIA, office dock)"
-echo ""
-read -p "Profile [1/2]: " PROFILE_CHOICE
+PROFILE_FILE="$HOME/.config/dotfiles-profile"
 
-case "$PROFILE_CHOICE" in
-    1) PROFILE="personal" ;;
-    2) PROFILE="work" ;;
-    *) err "Invalid choice. Run again and select 1 or 2." ;;
-esac
+if [ -f "$PROFILE_FILE" ]; then
+    PROFILE=$(cat "$PROFILE_FILE")
+    if [ "$PROFILE" = "personal" ] || [ "$PROFILE" = "work" ]; then
+        ok "Profile: $PROFILE (saved)"
+        read -p "Change profile? (y/N): " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            rm -f "$PROFILE_FILE"
+        fi
+    else
+        warn "Invalid saved profile, re-selecting..."
+        rm -f "$PROFILE_FILE"
+    fi
+fi
 
-ok "Profile: $PROFILE"
+if [ ! -f "$PROFILE_FILE" ]; then
+    echo "Select profile:"
+    echo "  1) personal — ThinkPad T14 (Intel, home dock)"
+    echo "  2) work     — Dell XPS (Intel + NVIDIA, office dock)"
+    echo ""
+    read -r -p "Profile [1/2]: " PROFILE_CHOICE
+
+    case "$PROFILE_CHOICE" in
+        1) PROFILE="personal" ;;
+        2) PROFILE="work" ;;
+        *) err "Invalid choice. Run again and select 1 or 2." ;;
+    esac
+
+    mkdir -p "$(dirname "$PROFILE_FILE")"
+    echo "$PROFILE" > "$PROFILE_FILE"
+    ok "Profile: $PROFILE (saved to $PROFILE_FILE)"
+fi
 
 # ============================================================
 # 1. Pre-checks
