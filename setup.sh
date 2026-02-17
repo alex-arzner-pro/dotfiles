@@ -97,6 +97,26 @@ if echo "$GPU_INFO" | grep -qi nvidia; then
             warn "No NVIDIA driver found by ubuntu-drivers"
         fi
     fi
+    # PRIME profile and PowerMizer performance mode (work profile)
+    if [ "$PROFILE" = "work" ]; then
+        if command -v prime-select &>/dev/null; then
+            CURRENT_PRIME=$(prime-select query 2>/dev/null || echo "unknown")
+            if [ "$CURRENT_PRIME" != "nvidia" ]; then
+                info "Setting PRIME profile to nvidia..."
+                sudo prime-select nvidia
+                ok "PRIME profile set to nvidia"
+                REBOOT_NEEDED=true
+            else
+                skip "PRIME profile already set to nvidia"
+            fi
+        fi
+
+        info "Setting PowerMizer to Prefer Maximum Performance..."
+        sudo tee /etc/modprobe.d/nvidia-powermizer.conf > /dev/null << 'NVPM_EOF'
+options nvidia NVreg_RegistryDwords="PowerMizerEnable=0x1;PerfLevelSrc=0x2222;PowerMizerDefault=0x3;PowerMizerDefaultAC=0x3"
+NVPM_EOF
+        ok "PowerMizer set to maximum performance"
+    fi
 else
     ok "Intel GPU only — no additional drivers needed"
 fi
