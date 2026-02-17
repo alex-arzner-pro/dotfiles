@@ -349,9 +349,7 @@ ok "Dark theme applied"
 # ============================================================
 info "Configuring Flatpak desktop integration..."
 
-if ! flatpak list --app | grep -q "org.freedesktop.Platform.openh264"; then
-    flatpak install -y flathub org.freedesktop.Platform.openh264 2>/dev/null || true
-fi
+flatpak install -y --noninteractive flathub org.freedesktop.Platform.openh264 2>/dev/null || true
 
 sudo flatpak override --filesystem=~/.local/share/icons:ro 2>/dev/null || true
 sudo flatpak override --filesystem=~/.local/share/themes:ro 2>/dev/null || true
