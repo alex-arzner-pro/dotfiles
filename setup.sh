@@ -482,6 +482,10 @@ cp "$DOTFILES_DIR/config/fuzzel/fuzzel.ini"     ~/.config/fuzzel/fuzzel.ini
 cp "$DOTFILES_DIR/config/dunst/dunstrc"         ~/.config/dunst/dunstrc
 cp "$DOTFILES_DIR/config/starship.toml"         ~/.config/starship.toml
 cp "$DOTFILES_DIR/config/electron-flags.conf"   ~/.config/electron-flags.conf
+cp "$DOTFILES_DIR/config/ventoy-web.sh"         ~/bin/ventoy-web.sh
+chmod +x ~/bin/ventoy-web.sh
+mkdir -p ~/.local/share/applications
+sed "s|HOMEDIR|$HOME|g" "$DOTFILES_DIR/config/ventoy.desktop" > ~/.local/share/applications/ventoy.desktop
 ok "Configs deployed"
 
 # ============================================================

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Ventoy
+Comment=Create bootable USB drives (WebUI)
+Exec=HOMEDIR/bin/ventoy-web.sh
+Icon=drive-removable-media
+Terminal=false
+Type=Application
+Categories=System;Utility;
