@@ -119,6 +119,17 @@ if echo "$GPU_INFO" | grep -qi nvidia; then
             echo "$NVPM_LINE" | sudo tee "$NVPM_CONF" > /dev/null
             ok "PowerMizer set to maximum performance"
         fi
+
+        # Sway needs --unsupported-gpu flag with proprietary NVIDIA drivers
+        SWAY_DESKTOP="/usr/share/wayland-sessions/sway.desktop"
+        if [ -f "$SWAY_DESKTOP" ]; then
+            if grep -q '\-\-unsupported-gpu' "$SWAY_DESKTOP"; then
+                skip "Sway already configured for NVIDIA (--unsupported-gpu)"
+            else
+                sudo sed -i 's|Exec=sway|Exec=sway --unsupported-gpu|' "$SWAY_DESKTOP"
+                ok "Sway configured for NVIDIA (--unsupported-gpu)"
+            fi
+        fi
     fi
 else
     ok "Intel GPU only — no additional drivers needed"
