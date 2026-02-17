@@ -232,7 +232,43 @@ sudo apt install -y \
 ok "Core packages installed"
 
 # ============================================================
-# 6. JetBrains Mono Nerd Font
+# 6a. Brightnessctl permissions
+# ============================================================
+info "Configuring brightnessctl permissions..."
+
+UDEV_BACKLIGHT="/etc/udev/rules.d/90-backlight.rules"
+UDEV_RULE='ACTION=="add", SUBSYSTEM=="backlight", RUN+="/bin/chgrp video /sys/class/backlight/%k/brightness", RUN+="/bin/chmod g+w /sys/class/backlight/%k/brightness"'
+if [ -f "$UDEV_BACKLIGHT" ] && grep -qF 'SUBSYSTEM=="backlight"' "$UDEV_BACKLIGHT"; then
+    skip "Backlight udev rule already configured"
+else
+    echo "$UDEV_RULE" | sudo tee "$UDEV_BACKLIGHT" > /dev/null
+    sudo udevadm control --reload-rules
+    sudo udevadm trigger --subsystem-match=backlight
+    ok "Backlight udev rule installed"
+fi
+
+if id -nG "$USER" | grep -qw video; then
+    skip "User already in video group"
+else
+    sudo usermod -aG video "$USER"
+    ok "User added to video group"
+    echo ""
+    warn "Group membership changed. Re-login required."
+    warn "After re-login, run this script again to continue setup."
+    echo ""
+    read -p "Log out now? (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        loginctl terminate-user "$USER"
+        exit 0
+    else
+        info "Please log out manually and re-run this script."
+        exit 0
+    fi
+fi
+
+# ============================================================
+# 7. JetBrains Mono Nerd Font
 # ============================================================
 info "Installing JetBrains Mono Nerd Font..."
 
