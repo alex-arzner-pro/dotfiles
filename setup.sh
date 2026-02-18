@@ -246,7 +246,7 @@ fi
 info "Installing Sway and core packages..."
 
 sudo apt install -y \
-    sway swayidle swaybg swaylock waybar wl-clipboard \
+    sway swayidle swaybg swaylock waybar wl-clipboard swaykbdd \
     grim slurp brightnessctl playerctl \
     kitty fuzzel dunst \
     pavucontrol network-manager-gnome udiskie blueman \
