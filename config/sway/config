@@ -128,6 +128,8 @@ bindsym --to-code XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@
 bindsym --to-code XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym --to-code XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
 bindsym --to-code $mod+m exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym --to-code $mod+Shift+o exec pactl list sinks | grep -E 'Name:|Description:' | paste - - | sed 's/.*Name: \(.*\)\t.*Description: \(.*\)/\2\t\1/' | fuzzel --dmenu --prompt 'Output: ' | awk -F'\t' '{print $2}' | xargs -r pactl set-default-sink
+bindsym --to-code $mod+Shift+i exec pactl list sources | grep -E 'Name:|Description:' | paste - - | sed 's/.*Name: \(.*\)\t.*Description: \(.*\)/\2\t\1/' | grep -v '\.monitor$' | fuzzel --dmenu --prompt 'Input: ' | awk -F'\t' '{print $2}' | xargs -r pactl set-default-source
 
 # ── Media ──
 bindsym --to-code XF86AudioPlay exec playerctl play-pause
