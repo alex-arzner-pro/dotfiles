@@ -415,6 +415,17 @@ fi
 fnm default 22
 
 # Shell integration (bashrc)
+if ! grep -q '\.local/bin' ~/.bashrc 2>/dev/null; then
+    cat >> ~/.bashrc << 'PATH_EOF'
+
+# Local binaries (Claude Code, pip, etc.)
+export PATH="$HOME/.local/bin:$PATH"
+PATH_EOF
+    ok "$HOME/.local/bin added to PATH in bashrc"
+else
+    skip "$HOME/.local/bin already in bashrc"
+fi
+
 if ! grep -q "fnm env" ~/.bashrc 2>/dev/null; then
     cat >> ~/.bashrc << 'FNM_EOF'
 
