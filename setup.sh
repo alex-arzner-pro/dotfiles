@@ -455,6 +455,27 @@ else
 fi
 
 # ============================================================
+# 7b. GitHub CLI (gh)
+# ============================================================
+info "Installing GitHub CLI..."
+
+if command -v gh &>/dev/null; then
+    skip "GitHub CLI already installed"
+else
+    sudo mkdir -p -m 755 /etc/apt/keyrings
+    GH_KEY=$(mktemp)
+    wget -nv -O"$GH_KEY" https://cli.github.com/packages/githubcli-archive-keyring.gpg
+    cat "$GH_KEY" | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null
+    sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+    rm -f "$GH_KEY"
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+        | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+    sudo apt update
+    sudo apt install -y gh
+    ok "GitHub CLI installed"
+fi
+
+# ============================================================
 # 8. Flatpak setup
 # ============================================================
 info "Setting up Flatpak..."
@@ -785,7 +806,7 @@ _line "  Chrome, VS Code, Antigravity"
 _line "  Nextcloud client"
 _line "  Signal, Slack, Telegram"
 _line "  Handy, Starship, Nerd Fonts"
-_line "  fnm, Node.js, Claude Code, Codex"
+_line "  fnm, Node.js, Claude Code, Codex, gh"
 _empty
 if [ "$PROFILE" = "work" ]; then
 _line "NOTE: Edit monitors after login:"
