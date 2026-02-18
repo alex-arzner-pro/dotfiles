@@ -138,6 +138,7 @@ bindsym --to-code XF86AudioPrev exec playerctl previous
 
 # ── Handy voice transcription ──
 bindsym --to-code Ctrl+space exec handy --toggle-transcription
+bindsym --to-code Ctrl+Shift+space exec handy --toggle-post-process
 
 # ── Clipboard history ──
 bindsym --to-code $mod+c exec cliphist list | fuzzel --dmenu | cliphist decode | wl-copy
