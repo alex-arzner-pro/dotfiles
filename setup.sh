@@ -427,11 +427,11 @@ else
     skip "fnm already in bashrc"
 fi
 
-# Claude Code CLI
+# Claude Code CLI (native installer, auto-updates)
 if command -v claude &>/dev/null; then
     skip "Claude Code CLI already installed"
 else
-    npm install -g @anthropic-ai/claude-code
+    curl -fsSL https://claude.ai/install.sh | bash
     ok "Claude Code CLI installed"
 fi
 
