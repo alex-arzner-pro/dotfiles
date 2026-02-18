@@ -390,6 +390,60 @@ else
 fi
 
 # ============================================================
+# 7a. fnm (Fast Node Manager) + Node.js + AI CLI tools
+# ============================================================
+info "Installing fnm and Node.js..."
+
+if command -v fnm &>/dev/null; then
+    skip "fnm already installed"
+else
+    curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
+    export PATH="$HOME/.local/share/fnm:$PATH"
+    ok "fnm installed"
+fi
+
+# Ensure fnm is on PATH for the rest of this script
+eval "$(fnm env)"
+
+if fnm list | grep -q "v22"; then
+    skip "Node.js 22 LTS already installed"
+else
+    fnm install 22
+    ok "Node.js 22 LTS installed"
+fi
+
+fnm default 22
+
+# Shell integration (bashrc)
+if ! grep -q "fnm env" ~/.bashrc 2>/dev/null; then
+    cat >> ~/.bashrc << 'FNM_EOF'
+
+# fnm (Fast Node Manager)
+export PATH="$HOME/.local/share/fnm:$PATH"
+eval "$(fnm env --use-on-cd)"
+FNM_EOF
+    ok "fnm added to bashrc"
+else
+    skip "fnm already in bashrc"
+fi
+
+# Claude Code CLI
+if command -v claude &>/dev/null; then
+    skip "Claude Code CLI already installed"
+else
+    npm install -g @anthropic-ai/claude-code
+    ok "Claude Code CLI installed"
+fi
+
+# Codex CLI
+if command -v codex &>/dev/null; then
+    skip "Codex CLI already installed"
+else
+    npm install -g @openai/codex
+    ok "Codex CLI installed"
+fi
+
+# ============================================================
 # 8. Flatpak setup
 # ============================================================
 info "Setting up Flatpak..."
@@ -720,6 +774,7 @@ _line "  Chrome, VS Code, Antigravity"
 _line "  Nextcloud client"
 _line "  Signal, Slack, Telegram"
 _line "  Handy, Starship, Nerd Fonts"
+_line "  fnm, Node.js, Claude Code, Codex"
 _empty
 if [ "$PROFILE" = "work" ]; then
 _line "NOTE: Edit monitors after login:"
